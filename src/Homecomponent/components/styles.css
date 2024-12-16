@@ -1,0 +1,167 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #F5F5F5;
+}
+
+.mb-4{
+  margin-bottom: 10px;
+}
+/* Hero Section */
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2C3E50;
+  padding: 0px 50px;
+  padding-bottom: 0px !important;
+  border-radius: 0px 0px 300px;
+  overflow: hidden;
+}
+
+.text-container {
+  width: 50%;
+  padding: 0px;
+}
+
+.text-container h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.text-container p.lead {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;
+}
+
+/* Button Styles */
+.btn {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Key Benefits */
+.hero-points p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e0f7fa;
+  margin: 0.5rem 0;
+}
+
+/* Image Container */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.hero-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  
+}
+
+.card.border-0.shadow{
+  height: 250px;
+}
+
+img.card-img-top {
+  width: 50px;
+  height: 50px;
+  margin: 0px auto;
+}
+
+img.why-choose-img.mb-3{
+  width: 50px;
+  margin: 0px auto;
+}
+
+.col-md-6.d-flex.align-items-center.justify-content-center {
+  background: #3498DB;
+  color: white;
+  border-radius: 0px 50px 50px 0px;
+}
+
+button.btn.btn-primary.ready-button {
+  background: #E67E22;
+}
+
+.row.w-100.mx-0 {
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+
+
+
+
+/* Footer Styles */
+.footer {
+  background-color: #2C3E50; /* Dark blue background */
+  color: #ffffff; /* White text */
+}
+
+.footer-logo {
+  max-height: 50px; /* Adjust height based on the logo size */
+}
+
+.footer-link {
+  color: #ffffff; /* White text for links */
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.footer-link:hover {
+  color: #00bfff; /* Light blue hover color */
+}
+
+.social-icon {
+  color: #ffffff;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+  color: #00bfff; /* Light blue hover color */
+}
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-hero {
+    flex-direction: column;
+  }
+  
+  .text-container, .image-container {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}

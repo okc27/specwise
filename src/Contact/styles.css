@@ -1,0 +1,115 @@
+/* Hero Section Styles */
+.hero-section {
+    display: flex;
+    background-color: #f8f9fa; /* Light background color */
+    padding: 0;
+    height: 40vh; /* Takes 75% of the viewport height */
+  }
+  
+  /* Hero Container */
+  .hero-container {
+    width: 100%; /* Ensures full-width */
+    padding: 0;
+  }
+  
+  /* Image Styling */
+  .img-fluid {
+    width: 100%;
+    max-width: 100%; /* Prevents the image from overflowing */
+    height: auto; /* Maintains aspect ratio */
+    object-fit: cover; /* Ensures the image scales nicely */
+  }
+  
+
+
+
+
+  /* Contact Page Styles */
+.contact-us-section {
+  background-color: #f8f9fa;
+  padding: 50px 0;
+}
+
+.contact-us-section .container {
+  max-width: 900px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.contact-us-section h2 {
+  font-size: 2.5rem;
+}
+
+.contact-us-section .form-control {
+  font-size: 0.9rem;
+  border-color: #dee2e6;
+}
+
+.contact-us-section .form-control:focus {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.contact-us-section .btn-warning {
+  background-color: #f57c00;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.contact-us-section .btn-warning:hover {
+  background-color: #e86b00;
+}
+
+.contact-us-section .image-container img {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  display: block;
+}
+
+div#img-show{
+    width: 100%;
+}
+.contact-us-section a {
+  color: #007bff;
+}
+
+#contact-hero{
+    background-color: transparent;
+}
+   
+
+.contact-us-section a:hover {
+  text-decoration: underline;
+}
+
+div#img-show {
+    width: 100%;
+}
+
+.img-bg {
+    width: 30%;
+    height: 100%;
+    position: relative;
+}
+
+.text-bg {
+    width: 70%;
+    background: #ffffff;
+    border-radius: 20px 0px 0px 20px;
+}
+
+img.img-fluid.rounded {
+    position: absolute;
+    right: 175px;
+    height: 600%;
+    border-radius: 20px !important;
+}
+
+.row.align-items-center.p-0 {
+    background: #2C3E50;
+}
+
+.col-md-8.px-5 {
+    padding: 50px;
+}
