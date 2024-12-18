@@ -83,7 +83,7 @@ const TeamSection = () => {
                 </div>
                 </div>
                 {/* Member Info */}
-                <div className="card-body">
+                <div className="card-body" id="team-body">
                   <h5 className="fw-bold">{member.name}</h5>
                   <p
                     className="text-dark mb-1"

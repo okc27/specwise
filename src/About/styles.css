@@ -28,14 +28,19 @@ div#root {
 }
 
 .img-fluid {
-    max-width: 75%;
     height: auto;
+}
+
+#img-f{
+  object-fit: fill;
 }
 
 .img-mission{
     display: flex;
     justify-content: flex-end;
 }
+
+
 
 /* CSS for the shadow effect */
 .row.align-items-center {
@@ -50,7 +55,7 @@ div#root {
 }
 
 .card{
-    height: 250px;
+    height: 300px;
     display: flex;
     justify-content: center;
     box-shadow: 0px 4px 24px 0px #BDC3C7; 
@@ -127,6 +132,14 @@ div#root {
   .card-body{
     padding-top: 20%;
   }
+
+#txt{
+  padding: 50px;
+}
+
+#team-body{
+  margin-top: 50px;
+}
 
   /* Shadow on top 50% */
 .team-img-wrapper.shadow-top::before {

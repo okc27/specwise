@@ -5,7 +5,7 @@ const HeroSection = () => {
   return (
     <section className="hero-section text-center text-white">
       <div className="hero-container">
-        <div className="text-con">
+        <div className="text-con" id="txt">
           <div className="txt">
           <h1 className="display-5 fw-bold">About Us</h1>
           <p className="lead">
@@ -16,6 +16,7 @@ const HeroSection = () => {
         </div>
         <div className="img-con">
           <img
+            id="img-f"
             src={hero_pic} // Replace with actual path
             alt="About Us Illustration"
             className="img-fluid mt-4"
