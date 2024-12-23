@@ -4,59 +4,49 @@ import Navbar from '../components/maincomponents/Navbar';
 import Footer from '../components/maincomponents/Footer';
 import InputQuestion from './subcomponents/InputQuestion';
 import Recommendation from './subcomponents/Recommendation';
-import Details from './subcomponents/Details';
-import Comparison from './subcomponents/Comparison';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 
 function Recommendations() {
   const [inputQuestion, setInputQuestion] = useState('');
-  const [recommendations, setRecommendations] = useState(null);
+  const [tempQuestion, setTempQuestion] = useState(''); // Temporary state for the textarea
   const [loading, setLoading] = useState(false);
-  const [inputCount, setInputCount] = useState(0);
+  const [error, setError] = useState(null);
+  const [showRecommendation, setShowRecommendation] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    setInputQuestion(e.target.value);
+    setTempQuestion(e.target.value); // Update only the temporary state
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+    setShowRecommendation(false);
+
+    setInputQuestion(tempQuestion); // Update the main state on submit
 
     try {
-      const response = await fetch('http://localhost:8000/api/recommendations/', {
+      const classifyResponse = await fetch('http://localhost:8000/api/classify-query/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: inputQuestion }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: tempQuestion }), // Send the temporary question
       });
 
-      const data = await response.json();
-      setRecommendations(data);
+      const classifyData = await classifyResponse.json();
 
-      // Save input and output to the database
-      if (inputCount === 0) {
-        await fetch('http://localhost:8000/api/user-input-output/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify({
-            input_question: inputQuestion,
-            output_recommendations: data,
-          }),
-        });
+      if (classifyData.is_hardware_related === 'yes') {
+        setShowRecommendation(true);
+        console.log('Query is related to hardware:', tempQuestion);
+      } else {
+        setError('This query is not related to hardware. Please ask about hardware recommendations.');
       }
-
-      setInputCount(inputCount + 1);
-
-      if (inputCount >= 1 && !localStorage.getItem('token')) {
-        alert('You must log in to continue using the service.');
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError('An error occurred while fetching data. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -66,20 +56,26 @@ function Recommendations() {
     <>
       <Navbar />
       <div className="container mt-5">
-        <div className='rec-main-text'>
+        <div className="rec-main-text">
           <h1>WELCOME TO SPECWISE</h1>
-          <h2>LETS FIND HARDWARE FOR YOU</h2>
+          <h2>LET'S FIND HARDWARE FOR YOU</h2>
           <p>Find the perfect PC hardware based on your software and usage needs.</p>
         </div>
         <InputQuestion
-          inputQuestion={inputQuestion}
+          inputQuestion={tempQuestion} // Bind the temporary state
           handleInputChange={handleInputChange}
           handleSubmit={handleSubmit}
         />
+
         {loading && <p>Loading...</p>}
-        <Recommendation recommendations={recommendations} />
-        <Details /> {/* Placeholder */}
-        <Comparison /> {/* Placeholder */}
+
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {showRecommendation && <Recommendation inputQuestion={inputQuestion} />}
       </div>
       <Footer />
     </>

@@ -8,13 +8,14 @@ import logo from "./assets/logo.svg"; // Import the image
 import login from "./assets/login.png"; // Import the image
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,14 +50,14 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="email" className="form-label">Email address</label>
+              <label htmlFor="username" className="form-label">Username</label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="username"
+                id="username"
+                name="username"
                 className="form-input"
-                placeholder="Enter your email"
-                value={credentials.email}
+                placeholder="Enter your username"
+                value={credentials.username}
                 onChange={handleInputChange}
                 required
               />

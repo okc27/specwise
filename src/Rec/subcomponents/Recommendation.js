@@ -1,57 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import cpuImage from '../assets/cpu.png'; // Example import for CPU
-import gpuImage from '../assets/gpu.png'; // Add corresponding paths
+import cpuImage from '../assets/cpu.png';
+import gpuImage from '../assets/gpu.png';
 import ramImage from '../assets/ram.png';
 import ssdImage from '../assets/ssd.png';
 import motherboardImage from '../assets/motherboard.png';
 import powersupplyImage from '../assets/powersupply.png';
 
-function Recommendation() {
-  const dummyDictionary = {
-    'Software Name': 'AI Model Training Software (General)',
-    'Task to Perform': 'AI Model Training',
-    'Hardware Mentioned': 'CPU, RAM, Motherboard',
-    'Special Task': 'AI Model Training (High-performance hardware required)',
-  };
+function Recommendation({ inputQuestion }) {
+  const [questionDetails, setQuestionDetails] = useState(null);
+  const [hardwareRecommendation, setHardwareRecommendation] = useState(null);
 
-  const minimumRecommended = {
-    CPU: {
-      option1: 'AMD Ryzen 9 5950X',
-      option2: 'Intel Core i9-10900K',
-      note: 'These CPUs are both high-performance options that can handle multiple virtual machines efficiently. The AMD Ryzen 9 5950X has 16 cores and 32 threads, while the Intel Core i9-10900K has 10 cores and 20 threads.',
-    },
-    RAM: {
-      option1: 'Corsair Vengeance LPX 16GB (2 x 8GB) DDR4 DRAM 3200MHz',
-      option2: 'G.Skill Ripjaws V Series 32GB (2 x 16GB) DDR4 DRAM 3600MHz',
-      note: 'The 16GB and 32GB capacities provide ample memory for running multiple virtual machines efficiently.',
-    },
-    Motherboard: {
-      option1: 'ASUS ROG Strix X570-E Gaming',
-      option2: 'MSI MEG X570 ACE',
-      note: 'Both motherboards are high-end and support robust virtualization capabilities.',
-    },
-  };
+  // State for managing the expanded note
+  const [expandedNote, setExpandedNote] = useState(null);  // Always call hooks unconditionally
 
-  const maximumRecommended = {
-    CPU: {
-      option1: 'Intel Core i7-9700K',
-      option2: 'AMD Ryzen 7 3700X',
-      note: 'These CPUs are recommended for high performance and multi-threading capabilities.',
-    },
-    RAM: {
-      option1: 'Corsair Vengeance LPX 16GB (2 x 8GB) DDR4 DRAM 3200MHz',
-      option2: 'G.Skill Ripjaws V Series 32GB (2 x 16GB) DDR4 DRAM 3600MHz',
-      note: 'Higher RAM capacity can improve performance for multiple virtual machines.',
-    },
-    Motherboard: {
-      option1: 'ASUS Prime X570-Pro',
-      option2: 'ASUS ROG Strix X570-E Gaming',
-      note: 'These motherboards are ideal for virtualization and multi-device connectivity.',
-    },
-  };
-
-  // Component to Image mapping
+  // Image mapping for hardware components
   const imageMapping = {
     CPU: cpuImage,
     GPU: gpuImage,
@@ -61,54 +24,127 @@ function Recommendation() {
     PowerSupply: powersupplyImage,
   };
 
-  const renderTable = (component) => (
-    <div className="mb-4">
-      <h2 className="text-primary text-center mb-3" id='rec-text'>
-        <img
-          src={imageMapping[component] || ''}
-          alt={component}
-          style={{ width: '40px', height: '40px', marginRight: '10px' }}
-        />
-        {component}
-      </h2>
-      {/* Table for Recommendations */}
-      <table className="table table-bordered table-striped">
-        <thead className="custom-thead">
-          <tr>
-            <th colSpan="4" className="text-center">Recommendations</th>
-          </tr>
-          <tr>
-            <th>Type</th>
-            <th>Option 1</th>
-            <th>Option 2</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Max</td>
-            <td>{maximumRecommended[component]?.option1}</td>
-            <td>{maximumRecommended[component]?.option2}</td>
-            <td>{maximumRecommended[component]?.note}</td>
-          </tr>
-          <tr>
-            <td>Min</td>
-            <td>{minimumRecommended[component]?.option1}</td>
-            <td>{minimumRecommended[component]?.option2}</td>
-            <td>{minimumRecommended[component]?.note}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
+  // Fetch question details from the API
+  const fetchQuestionDetails = async (question) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/question_details/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+      });
+      const data = await response.json();
+      setQuestionDetails(data); // Store API response in state
+    } catch (error) {
+      console.error('Error fetching question details:', error);
+    }
+  };
+
+  // Fetch hardware recommendations using question details
+  const fetchHardwareRecommendation = async (details) => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/hardware_recommendation/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(details),
+      });
+      const data = await response.json();
+      setHardwareRecommendation(data.recommendations); // Store hardware recommendations in state
+    } catch (error) {
+      console.error('Error fetching hardware recommendation:', error);
+    }
+  };
+
+  // Trigger API call when inputQuestion changes
+  useEffect(() => {
+    if (inputQuestion) {
+      fetchQuestionDetails(inputQuestion);
+    }
+  }, [inputQuestion]);
+
+  // Trigger hardware recommendation API when questionDetails is updated
+  useEffect(() => {
+    if (questionDetails) {
+      fetchHardwareRecommendation(questionDetails);
+    }
+  }, [questionDetails]);
+
+  // Display loading message if data is not available
+  if (!questionDetails || !hardwareRecommendation) {
+    return <div>Loading...</div>;
+  }
+
+  // Function to truncate the note and handle "See More" functionality
+  const truncateNote = (note) => {
+    if (!note) return '';
+    const limit = 50;
+    return note.length > limit ? note.slice(0, limit) + '...' : note;
+  };
+
+  const toggleNoteExpansion = (index) => {
+    setExpandedNote(expandedNote === index ? null : index);
+  };
+
+  // Render hardware recommendation details grouped by component
+  const renderHardwareRecommendationSection = (hardwareData, requirementType) => {
+    return Object.entries(hardwareData).map(([key, { option1, option2, note }], index) => (
+      <div key={index} className="mb-4">
+        <div className="d-flex align-items-center mb-3">
+          <img src={imageMapping[key]} alt={key} className="img-fluid" style={{ width: '40px', marginRight: '10px' }} />
+          <h5 className="text-primary">{key}</h5>
+        </div>
+        <table className="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Option 1</th>
+              <th>Option 2</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{requirementType}</td>
+              <td>{option1}</td>
+              <td>{option2}</td>
+              <td>
+                <div>
+                  {expandedNote === index ? (
+                    <p>{note}</p>
+                  ) : (
+                    <p>{truncateNote(note)}</p>
+                  )}
+                  {note && note.length > 50 && (
+                    <button
+                      className="btn btn-link p-0"
+                      onClick={() => toggleNoteExpansion(index)}
+                    >
+                      {expandedNote === index ? 'See Less' : 'See More'}
+                    </button>
+                  )}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    ));
+  };
 
   return (
     <div className="container mt-5">
       <h3 className="mb-4 text-center text-success">Question Details</h3>
 
-      {/* Question Details */}
+      {/* Display the input question */}
+      <div className="alert alert-info">
+        <strong>Input Question:</strong> {questionDetails.question}
+      </div>
+      {/* Render question details */}
       <div className="row">
-        {Object.entries(dummyDictionary).map(([key, value], index) => (
+        {Object.entries(questionDetails.recommendation_details || {}).map(([key, value], index) => (
           <div key={index} className="col-md-6 mb-3">
             <div className="card shadow-sm h-100">
               <div className="card-body">
@@ -119,13 +155,17 @@ function Recommendation() {
           </div>
         ))}
       </div>
- 
-      {/* Recommendations */}
-      <div className="container mt-5">
-      <h3 className="mb-2 text-center text-success">Hardware Recommendations</h3>
-        {Object.keys(minimumRecommended).map((component) => (
-          <div key={component}>{renderTable(component)}</div>
-        ))}
+
+      {/* Render Minimum hardware recommendations */}
+      <h4 className="text-center text-primary">Minimum Hardware Requirements</h4>
+      <div>
+        {renderHardwareRecommendationSection(hardwareRecommendation.minimum, 'Minimum')}
+      </div>
+
+      {/* Render Best Suitable hardware recommendations */}
+      <h4 className="text-center text-primary">Best Suitable Hardware Requirements</h4>
+      <div>
+        {renderHardwareRecommendationSection(hardwareRecommendation.suitable, 'Best Suitable')}
       </div>
     </div>
   );
