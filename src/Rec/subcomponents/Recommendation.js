@@ -6,6 +6,8 @@ import ramImage from '../assets/ram.png';
 import ssdImage from '../assets/ssd.png';
 import motherboardImage from '../assets/motherboard.png';
 import powersupplyImage from '../assets/powersupply.png';
+import Details from './Details';
+
 
 function Recommendation({ inputQuestion }) {
   const [questionDetails, setQuestionDetails] = useState(null);
@@ -168,6 +170,7 @@ function Recommendation({ inputQuestion }) {
         {renderHardwareRecommendationSection(hardwareRecommendation.suitable, 'Best Suitable')}
       </div>
     </div>
+    
   );
 }
 

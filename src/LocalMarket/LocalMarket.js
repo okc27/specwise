@@ -7,7 +7,7 @@ import './LocalMarket.css'; // Import the custom CSS file
 function LocalMarket() {
   const [formData, setFormData] = useState({
     hardwareName: '',
-    shopId: 4, // Default shop ID
+    shopId: 9, // Default shop ID set to 7
     hardwareType: 'CPU', // Default selection
     price: '',
     productLinkOrAddress: '',
@@ -36,13 +36,60 @@ function LocalMarket() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', formData);
-    alert('Hardware data submitted successfully!');
-    // Further logic to send the formData to the backend can be added here
+  
+    const { hardwareName, shopId, hardwareType, price, productLinkOrAddress, useShopAddress } = formData;
+  
+    // Validate the required fields
+    if (!hardwareName || !price || !productLinkOrAddress) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+  
+    // Convert price to a number
+    const priceNumber = parseFloat(price);
+    if (isNaN(priceNumber) || priceNumber <= 0) {
+      alert("Please enter a valid price.");
+      return;
+    }
+  
+    // Define the payload object for the API
+    const payload = {
+      name: hardwareName,
+      store_id: shopId,
+      category: hardwareType,
+      price: priceNumber, // Ensure price is a number
+      link: productLinkOrAddress, // Ensure the link is a valid string or URL
+      rating: null,  // Optional field, include if needed
+    };
+  
+    console.log('Payload:', payload);  // Log the payload to check the structure
+  
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/hardware-data/add-product/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        console.error('Error Details:', errorDetails);  // Log any detailed error message from the API response
+        throw new Error('Failed to add product');
+      }
+  
+      const result = await response.json();
+      console.log('Product added successfully:', result);
+      alert('Hardware data submitted successfully!');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('There was an error submitting the form.');
+    }
   };
-
+  
   return (
     <>
       <Navbar backgroundColor="#007bff" pageName="aboutus" />

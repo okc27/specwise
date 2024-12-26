@@ -4,6 +4,7 @@ import Navbar from '../components/maincomponents/Navbar';
 import Footer from '../components/maincomponents/Footer';
 import InputQuestion from './subcomponents/InputQuestion';
 import Recommendation from './subcomponents/Recommendation';
+import Details from './subcomponents/Details';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 
@@ -13,6 +14,7 @@ function Recommendations() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showRecommendation, setShowRecommendation] = useState(false);
+  const [showDetails, setShowDetails] = useState(false); // New state to manage hardware details display
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -24,6 +26,7 @@ function Recommendations() {
     setLoading(true);
     setError(null);
     setShowRecommendation(false);
+    setShowDetails(false); // Reset details when submitting new question
 
     setInputQuestion(tempQuestion); // Update the main state on submit
 
@@ -40,6 +43,7 @@ function Recommendations() {
 
       if (classifyData.is_hardware_related === 'yes') {
         setShowRecommendation(true);
+        setShowDetails(true); // Show hardware details when recommendations are displayed
         console.log('Query is related to hardware:', tempQuestion);
       } else {
         setError('This query is not related to hardware. Please ask about hardware recommendations.');
@@ -76,7 +80,11 @@ function Recommendations() {
         )}
 
         {showRecommendation && <Recommendation inputQuestion={inputQuestion} />}
+        
+        {/* Conditionally render Details after the recommendations */}
+        {showDetails && <Details />}
       </div>
+
       <Footer />
     </>
   );

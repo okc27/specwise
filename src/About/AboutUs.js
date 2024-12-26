@@ -15,7 +15,6 @@ const AboutUs = () => {
       <HeroSection />
       <MissionSection />
       <ValuesSection />
-      <TeamSection />
     </div>
     <Footer />
     </>

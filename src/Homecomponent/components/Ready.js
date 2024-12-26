@@ -1,9 +1,17 @@
 // components/Ready.js
 import React from 'react';
 import './styles.css';
+import { useNavigate } from 'react-router-dom';
 import illustration from '../ready to build pc/pic.svg'; // Import the image
 
 const Ready = () => {
+
+  const navigate = useNavigate();
+
+  const handleGoToRecommendations = () => {
+    navigate('/recommendations'); // Navigate to the recommendations page
+  };
+  
   return (
     <div className="ready-section container py-5 text-center">
       <div className="row w-100 mx-0">
@@ -21,12 +29,20 @@ const Ready = () => {
               Get started with tailored hardware recommendations that match your
               needs.
             </p>
-            <button className="btn btn-primary ready-button">Get Started</button>
+                    {/* Button to Recommendations */}
+              <a
+                href="#get-started"
+                className="btn btn-primary btn-lg"
+                onClick={handleGoToRecommendations}
+              >
+                Get Started
+              </a>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default Ready;
